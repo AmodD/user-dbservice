@@ -6,6 +6,7 @@ const config = require('./config');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
+var methodOverride = require('method-override')
 
 const db = new DB("sqlitedb")
 const app = express();
@@ -25,6 +26,11 @@ const enableCrossDomain = function (req, res, next) {
 }
 
 app.use(enableCrossDomain)
+
+app.use(methodOverride())
+app.use(logErrors)
+app.use(clientErrorHandler)
+app.use(errorHandler)
 
 
 router.post('/register', function (req, res) {
@@ -60,6 +66,24 @@ router.post('/login', (req, res) => {
 
 
 app.use(router)
+
+function logErrors (err, req, res, next) {
+  console.error(err.stack)
+  next(err)
+}
+
+function clientErrorHandler (err, req, res, next) {
+  if (req.xhr) {
+    res.status(500).send({ error: 'Something failed!' })
+  } else {
+    next(err)
+  }
+}
+
+function errorHandler (err, req, res, next) {
+  res.status(500)
+  res.render('error', { error: err })
+}
 
 let port = process.env.PORT || 48304;
 
