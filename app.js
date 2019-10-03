@@ -54,7 +54,7 @@ router.post('/register', function (req, res) {
 router.post('/login', (req, res) => {
     db.selectByEmail(req.body.email, (err, user) => {
         if (err) return res.status(500).send('Error on the server.');
-        if (!user) return res.status(404).send('No user found.');
+        if (!user) return res.status(404).send('User not found.');
         let passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
         if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
         let token = jwt.sign({ id: user.id }, config.secret, {
