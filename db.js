@@ -12,6 +12,7 @@ class Db {
             CREATE TABLE IF NOT EXISTS userAuth (
                 id integer PRIMARY KEY, 
                 name text, 
+                displayName text null, 
                 email text UNIQUE, 
                 password text)`
         return this.db.run(sql);
@@ -27,7 +28,7 @@ class Db {
 
     insert(user, callback) {
         return this.db.run(
-            'INSERT INTO userAuth (name,email,password) VALUES (?,?,?)',
+            'INSERT INTO userAuth (name,displayName,email,password) VALUES (?,?,?,?)',
             user, (err) => {
                 callback(err)
             })
