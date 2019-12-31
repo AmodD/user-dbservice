@@ -1,14 +1,16 @@
 "use strict";
 
 const express = require('express');
-const DB = require('./db');
+//const DB = require('./db_sqlite');
+const DB = require('./db_awsrdsmysql');
 const config = require('./config');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 var methodOverride = require('method-override')
 
-const db = new DB("system_user_db.sqlite")
+//const db = new DB("system_user_db.sqlite")
+const db = new DB(); 
 const app = express();
 const router = express.Router();
 
